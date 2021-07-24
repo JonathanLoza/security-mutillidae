@@ -1,0 +1,6 @@
+[Sat Jul 24 23:24:00.052235 2021] [ssl:warn] [pid 1] AH01906: mutillidae.local:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 24 23:24:00.146061 2021] [ssl:warn] [pid 1] AH01906: mutillidae.local:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 24 23:26:55.874825 2021] [ssl:warn] [pid 1] AH01906: mutillidae.local:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 24 23:26:55.896043 2021] [ssl:warn] [pid 1] AH01906: mutillidae.local:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 24 23:33:03.729055 2021] [ssl:warn] [pid 1] AH01906: mutillidae.local:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 24 23:33:03.744462 2021] [ssl:warn] [pid 1] AH01906: mutillidae.local:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)

@@ -1,0 +1,12 @@
+[Sat Jul 24 23:24:00.051544 2021] [ssl:warn] [pid 1] AH01906: cors.mutillidae.local:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 24 23:24:00.051861 2021] [ssl:warn] [pid 1] AH01909: cors.mutillidae.local:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 24 23:24:00.145698 2021] [ssl:warn] [pid 1] AH01906: cors.mutillidae.local:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 24 23:24:00.145714 2021] [ssl:warn] [pid 1] AH01909: cors.mutillidae.local:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 24 23:26:55.874478 2021] [ssl:warn] [pid 1] AH01906: cors.mutillidae.local:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 24 23:26:55.874552 2021] [ssl:warn] [pid 1] AH01909: cors.mutillidae.local:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 24 23:26:55.895763 2021] [ssl:warn] [pid 1] AH01906: cors.mutillidae.local:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 24 23:26:55.895778 2021] [ssl:warn] [pid 1] AH01909: cors.mutillidae.local:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 24 23:33:03.728794 2021] [ssl:warn] [pid 1] AH01906: cors.mutillidae.local:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 24 23:33:03.728850 2021] [ssl:warn] [pid 1] AH01909: cors.mutillidae.local:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Jul 24 23:33:03.744255 2021] [ssl:warn] [pid 1] AH01906: cors.mutillidae.local:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sat Jul 24 23:33:03.744266 2021] [ssl:warn] [pid 1] AH01909: cors.mutillidae.local:443:0 server certificate does NOT include an ID which matches the server name
