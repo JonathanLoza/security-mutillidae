@@ -5,9 +5,9 @@
 	try{
     	switch ($_SESSION["security-level"]){
     		case "0": // This code is insecure. No input validation is performed.
-				$lEnableJavaScriptValidation = FALSE;
-    			$lEnableHTMLControls = FALSE;
-    			$lValidateFileUpload = FALSE;
+				$lEnableJavaScriptValidation = TRUE;
+    			$lEnableHTMLControls = TRUE;
+    			$lValidateFileUpload = TRUE;
 				$lAllowedFileSize = 2000000;
 				$lUploadDirectoryFlag = "CLIENT_DECIDES";
 			break;
@@ -49,11 +49,12 @@
 			
 			/* Common file properties */
 			$lFilename = $_FILES["filename"]["name"];
+      $lFileRandomName = md5($lFilename);
 			$lFileTempName = $_FILES["filename"]["tmp_name"];
 			$lFileType = $_FILES["filename"]["type"];
 			$lFileSize = $_FILES["filename"]["size"];
 			$lFileUploadErrorCode = $_FILES["filename"]["error"];
-			$lFilePermanentName = $lTempDirectory . DIRECTORY_SEPARATOR . $lFilename;
+			$lFilePermanentName = $lTempDirectory . DIRECTORY_SEPARATOR . $lFileRandomName;
 
 			/* File properties needed for validation */
 			$lAllowedFileExtensions = array("gif", "jpeg", "jpg", "png");
@@ -95,17 +96,24 @@
 					$lValidationMessage .= " File type {$lFileType} not allowed.";
 					$lFileValid = FALSE;
 				}// end if
+        $imageinfo = getimagesize($lFileTempName);
+        $imageinfo['mime'] ??= '';
+        if(!in_array($imageinfo['mime'], $lAllowedFileTypes)&& isset($imageinfo)) 
+        {
+					$lValidationMessage .= " File extension {$imageinfo['mime']} not allowed.";
+					$lFileValid = FALSE;
+        }
 	
 				if ($lFileSize > $lAllowedFileSize){
 					$lValidationMessage .= "File size {$lFileSizeString} exceeds allowed file size {$lAllowedFileSizeString}.";
 					$lFileValid = FALSE;
-				}// end if
+        }// end if
 			}// end if $lValidateFileUpload
 			
 			if ($lFileValid){
 				if (move_uploaded_file($lFileTempName, $lFilePermanentName)) {
 					$lFileMovedSuccessfully = TRUE;
-					$lFileMovedMessage = "File moved to {$lFilePermanentName}";
+          $lFileMovedMessage = "File moved successfully";
 				}else{
 					$lFileMovedSuccessfully = FALSE;
 					$lFileMovedMessage = "Error Detected. Unable to move PHP temp file {$lTempDirectory} to permanent location {$lFilePermanentName}";
@@ -162,7 +170,6 @@
 					<tr><td>&nbsp;</td></tr>
 					<tr><td class='label'>Original File Name</td><td>{$lFilename}</td></tr>
 					<tr><td class='label'>Temporary File Name</td><td>{$lFileTempName}</td></tr>
-					<tr><td class='label'>Permanent File Name</td><td>{$lFilePermanentName}</td></tr>
 					<tr><td class='label'>File Type</td><td>{$lFileType}</td></tr>
 					<tr><td class='label'>File Size</td><td>{$lFileSizeString}</td></tr>
 				</table>	
