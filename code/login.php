@@ -176,6 +176,8 @@
    		case cUSERNAME_OR_PASSWORD_INCORRECT: 
    	   		lMessage="Username or password incorrect"; lAuthenticationFailed = "TRUE"; 
    		break;
+      case 6:
+   	   		lMessage="Too many tries. Try again in 10 minutes"; lAuthenticationFailed = "TRUE"; 
    	};
 
 	if(lAuthenticationFailed=="TRUE"){

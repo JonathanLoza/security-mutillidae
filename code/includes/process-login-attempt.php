@@ -53,8 +53,13 @@
 	   	$lQueryResult=NULL;
 
    		logLoginAttempt("User {$lUsername} attempting to authenticate");
+      $apc_key = "{$_SERVER['SERVER_NAME']}~login:{$_SERVER['REMOTE_ADDR']}";
+      $resultLogin = $SQLQueryHandler->verifyLoginTries($apc_key);
+      if(!$resultLogin){
+        $lAuthenticationAttemptResult =6;
+      }
 
-   		if (!$SQLQueryHandler->accountExists($lUsername)){
+   		if (!$SQLQueryHandler->accountExists($lUsername) && $resultLogin){
    		    if ($lConfidentialityRequired){
    		        $lAuthenticationAttemptResult = $cUSERNAME_OR_PASSWORD_INCORRECT;
    		    }else{
@@ -64,7 +69,7 @@
    			logLoginAttempt("Login Failed: Account {$lUsername} does not exist");
    		}// end if accountExists
 
-		if ($lKeepGoing){
+		if ($lKeepGoing && $resultLogin){
    			if (!$SQLQueryHandler->authenticateAccount($lUsername, $lPassword)){
    			    if ($lConfidentialityRequired){
    			        $lAuthenticationAttemptResult = $cUSERNAME_OR_PASSWORD_INCORRECT;
@@ -76,7 +81,9 @@
 	   		}//end if authenticateAccount
    		}//end if $lKeepGoing
 
+      if($resultLogin){
 		$lQueryResult = $SQLQueryHandler->getUserAccount($lUsername, $lPassword);
+      }
 
 		if (isset($lQueryResult->num_rows)){
    			if ($lQueryResult->num_rows > 0) {
