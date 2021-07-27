@@ -51,6 +51,40 @@
 	   	$lAuthenticationAttemptResultFound = FALSE;
 	   	$lKeepGoing = TRUE;
 	   	$lQueryResult=NULL;
+    $pk = '-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAuKdGuN/7m+G2zJDzv6JV55ntvK4hXYpq/xD1DOpypHan5rOY
+u9v/1DLUYDLm6BrUD2VeiBg+BftlPOqmadZvLjlF/QpgfKwZuznxIs94w0gyHqXK
+doikg82mb8M4IZGt7GJeybAaXha7jVfXHohHR5BYO/g5DTMj+P2QgiJ5sNKPNAbB
+LVsjR5S0/vDud9TqigaEPHEZagPkduJKoGNZiQrR8EoP6uulAMpJLjM0BnQuryko
+Oz076HG1CR3gz+dGmA7+QAU+KB9p7iEr8+tUzkTpvD3gQbHy6Fda2Q1/8uNteKNs
+ARg2/QiWjGpd1Pjcz+uAA95+HV3w3V3wnWKeDwIDAQABAoIBABTzhea8I0RQm/ki
+CUYZGT4qDPt3lnmSlwlR1zwb7d4TSIG4pv/JuoFNMyOnIuP7B0yn583xUjhDif0b
+cr5Xgk3wWayYXNJIhLLlpCKa/8zIiEdJ8Gr6nhAGaXgM4nWMnftQPgkMXjGGyskC
+ynnAZLYN/rTvOSnyP4ak3pylZMFXMWmf0YXBpQKzJeadoYLO+p0plK+uHPxXzv+8
+07/kk4NQpCkL/yUv9Umondlq3ZD3oo2at/TdAaYxi0qg5/mda+1n1a98g73q5RP8
+zfe39paYzpKqzODMMkiLxIgdyxL0lu+oGVMuWoQxwrTrxTiZP+KPKK65z5oVdnT6
+AWe6uCECgYEA2iTkk/4Bk5DIdjIpOUu+61zg1krS9LnZAA/C1xB05BXPsHtGF5Ig
+BHn7n9oBWbih59qtF+H48rpxM4smdiUhTGWIcpIMGXUFumabQlfzJUnFUTeOk2wm
+UVez6heXkFf0lB2+8EVRZg026ehPTgYLkrYy04vYVg8sUUzySx+k6tsCgYEA2LKN
+EVBKdLYalKtVRIL2jN+cUgyDISkvmNEG0briouXMkaGgrPrFe5CoHrlixjRN0VJx
+rpcQjwaB5pBpoALb0eOgd1J1hUmGX0ipyYFTROl1o/dZP32DQzWK5CjMuFu8hTTr
+Dz55FxST4ZEERB/zvr8BImuLYMuBnQBcjeIgTd0CgYB+XnLf3HxzTKMj/WjuHRgL
+ZnGFEjFkvaicpYS8a3cbjhsTZEY1b1wG29dNQdAYdqGsG3y8YhaCHklnj4uHU3kX
+tZW2sS47LRRVaA03AJYFGtgodWOtuS/1XTYHPQV7A8jWaOjsbWt7D9qo4//U9iGM
+KuoErHV1XTLSIh4WMM2rkwKBgQCrDSY1iH99aVHKEQSZtBcSVGB8k8venTgpFLah
+TzgfBe5Y9pByevDv/Nv4hLXnZtoWZVG/UxeLDsPzUANQf3EtWNUN21VRBRzAkgcU
+PLWSLAbkixcz+stmfhlIyLvwutkw/Pifa90Bzwh8gZAwhlhNNVCb7vByU7HYULS+
+esStMQKBgCpzInEy/CZS5SWrMmqp45Bh1FFWmXvDppa023qDbX6Y/b7r7beA9Xux
+BYTaSywD0Nd3ZUkZz1k+2cYkR6tc3VVAc8wTjyxTYwQF4Y3XNoreB4zXPLAp4TEL
+Q7FEYN4qc1yIR6EZFF76b27rkgzKVkywRuw+adjUxiu65u9hyFow
+-----END RSA PRIVATE KEY-----
+';
+      $decrypted_user = '';
+      openssl_private_decrypt(base64_decode($lUsername), $decrypted_user, $pk);
+      $lUsername=$decrypted_user;
+      $decrypted_pass = '';
+      openssl_private_decrypt(base64_decode($lPassword), $decrypted_pass, $pk);
+      $lPassword=$decrypted_pass;
 
    		logLoginAttempt("User {$lUsername} attempting to authenticate");
 
