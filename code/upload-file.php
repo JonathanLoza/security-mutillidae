@@ -5,9 +5,9 @@
 	try{
     	switch ($_SESSION["security-level"]){
     		case "0": // This code is insecure. No input validation is performed.
-				$lEnableJavaScriptValidation = TRUE;
-    			$lEnableHTMLControls = TRUE;
-    			$lValidateFileUpload = TRUE;
+				$lEnableJavaScriptValidation = FALSE;
+    			$lEnableHTMLControls = FALSE;
+    			$lValidateFileUpload = FALSE;
 				$lAllowedFileSize = 2000000;
 				$lUploadDirectoryFlag = "CLIENT_DECIDES";
 			break;
@@ -61,7 +61,7 @@
 			$lAllowedFileTypes = array("image/gif", "image/jpeg", "image/jpg", "image/pjpeg", "image/x-png", "image/png");
 			$lFilenameParts = explode(".", $lFilename);
 			$lFileExtension = end($lFilenameParts);
-			$lValidationMessage = "Validation not performed";
+			$lValidationMessage = "Validation performed";
 			$lFileMovedMessage = "Moving file was not attempted";
 			
 			/* File property strings suitible for printing */
@@ -96,19 +96,42 @@
 					$lValidationMessage .= " File type {$lFileType} not allowed.";
 					$lFileValid = FALSE;
 				}// end if
-        $imageinfo = getimagesize($lFileTempName);
-        $imageinfo['mime'] ??= '';
-        if(!in_array($imageinfo['mime'], $lAllowedFileTypes)&& isset($imageinfo)) 
-        {
-					$lValidationMessage .= " File extension {$imageinfo['mime']} not allowed.";
-					$lFileValid = FALSE;
-        }
 	
 				if ($lFileSize > $lAllowedFileSize){
 					$lValidationMessage .= "File size {$lFileSizeString} exceeds allowed file size {$lAllowedFileSizeString}.";
 					$lFileValid = FALSE;
         }// end if
 			}// end if $lValidateFileUpload
+      $lValidExtension = FALSE;
+      $lValidType=FALSE;
+      for($i = 0; $i<count($lAllowedFileExtensions);$i++){
+        if(strcmp($lAllowedFileExtensions[$i],$lFileExtension)== 0 ){
+          $lValidExtension = TRUE;
+        }
+      }
+      for($i = 0; $i<count($lAllowedFileTypes);$i++){
+        if(strcmp($lAllowedFileTypes[$i],$lFileType)== 0 ){
+          $lValidType = TRUE;
+        }
+      }
+      if(!$lValidType){
+					$lValidationMessage .= " File type {$lFileType} not allowed.";
+					$lFileValid = FALSE;
+      }
+      if(!$lValidExtension){
+					$lValidationMessage .= " File extension {$lFileExtension} not allowed.";
+					$lFileValid = FALSE;
+      }
+
+      if ( $lValidExtension && $lValidType ){
+        $imageinfo = getimagesize($lFileTempName);
+        $imageinfo['mime'] ??= '';
+        if(!in_array($imageinfo['mime'], $lAllowedFileTypes)&& isset($imageinfo)) 
+        {
+          $lValidationMessage .= " File not allowed.";
+          $lFileValid = FALSE;
+        }
+      }
 			
 			if ($lFileValid){
 				if (move_uploaded_file($lFileTempName, $lFilePermanentName)) {
