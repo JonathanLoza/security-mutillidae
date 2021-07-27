@@ -53,7 +53,8 @@
 	   	$lQueryResult=NULL;
 
    		logLoginAttempt("User {$lUsername} attempting to authenticate");
-      $apc_key = "{$_SERVER['SERVER_NAME']}~login:{$_SERVER['REMOTE_ADDR']}";
+      $r = gethostbyaddr($_SERVER["REMOTE_ADDR"]);
+      $apc_key = "{$r}~login:{$_SERVER['REMOTE_ADDR']}";
       $resultLogin = $SQLQueryHandler->verifyLoginTries($apc_key);
       if(!$resultLogin){
         $lAuthenticationAttemptResult =6;
