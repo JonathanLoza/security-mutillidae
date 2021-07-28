@@ -345,12 +345,16 @@ class SQLQueryHandler {
 			$pPassword = $this->mMySQLHandler->escapeDangerousCharacters($pPassword);
 		}// end if
 
-		$lQueryString =
-			"SELECT * FROM accounts
-			WHERE username='".$pUsername.
-			"' AND password='".$pPassword."'";
+		#$lQueryString =
+		#	"SELECT * FROM accounts
+		#	WHERE username='".$pUsername.
+		#	"' AND password='".$pPassword."'";
 
-		return $this->mMySQLHandler->executeQuery($lQueryString);
+		#return $this->mMySQLHandler->executeQuery($lQueryString);
+	
+		$lQueryString = "SELECT * FROM accounts WHERE username= ? AND password= ?";
+		return $this->mMySQLHandler->executeQuery_Prepare($lQueryString,$pUsername,$pPassword);
+	
 	}//end public function getUserAccount
 
 	/* -----------------------------------------
