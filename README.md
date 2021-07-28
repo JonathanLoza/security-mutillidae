@@ -1,4 +1,4 @@
-# Engenharia de Seguran ̧ca Segundo Trabalho
+# Engenharia de Segurança Segundo Trabalho
 
 **Membros**
 
