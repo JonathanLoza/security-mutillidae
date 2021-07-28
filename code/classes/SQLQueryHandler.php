@@ -282,6 +282,33 @@ class SQLQueryHandler {
 		}// end if
 
 	}//end public function getUsernames
+  
+  public function verifyLoginTries($key){
+    $lQueryString ="select tries,time from logins where id='".$key."';";
+		$lQueryResult = $this->mMySQLHandler->executeQuery($lQueryString);
+    $ldate = date('Y-m-d H:i:s');
+    if ($lQueryResult->num_rows > 0) {
+      $row = $lQueryResult->fetch_row();
+      $value = $row[0]+1;
+      $date_row= $row[1];
+      $min =strtotime($ldate)-strtotime($date_row);
+      $min =round(abs($min) / 60,2);
+      //echo "id: " . $date_row."<br>";
+      //echo "id: " . $ldate."<br>";
+      //echo "asdsd: " .$min."<br>";
+      if($value>=4){
+        if($min>=10){
+          $lQueryString ="update logins set tries=1, time='".$ldate."';";
+          $lQueryResult = $this->mMySQLHandler->executeQuery($lQueryString);
+          return true;
+        }
+        return false;
+      }
+    } 
+    $lQueryString ="insert into logins values('".$key."',1,'".$ldate."') ON DUPLICATE KEY update tries=tries+1, time='".$ldate."';";
+		$lQueryResult = $this->mMySQLHandler->executeQuery($lQueryString);
+    return true;
+  }
 
 	public function authenticateAccount($pUsername, $pPassword){
 
@@ -344,13 +371,10 @@ class SQLQueryHandler {
 			$pUsername = $this->mMySQLHandler->escapeDangerousCharacters($pUsername);
 			$pPassword = $this->mMySQLHandler->escapeDangerousCharacters($pPassword);
 		}// end if
-
-		$lQueryString =
-			"SELECT * FROM accounts
-			WHERE username='".$pUsername.
-			"' AND password='".$pPassword."'";
-
-		return $this->mMySQLHandler->executeQuery($lQueryString);
+	
+		$lQueryString = "SELECT * FROM accounts WHERE username= ? AND password= ?";
+		return $this->mMySQLHandler->executeQuery_Prepare($lQueryString,$pUsername,$pPassword);
+	
 	}//end public function getUserAccount
 
 	/* -----------------------------------------

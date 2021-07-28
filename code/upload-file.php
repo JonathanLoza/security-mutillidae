@@ -49,18 +49,19 @@
 			
 			/* Common file properties */
 			$lFilename = $_FILES["filename"]["name"];
+      $lFileRandomName = md5($lFilename);
 			$lFileTempName = $_FILES["filename"]["tmp_name"];
 			$lFileType = $_FILES["filename"]["type"];
 			$lFileSize = $_FILES["filename"]["size"];
 			$lFileUploadErrorCode = $_FILES["filename"]["error"];
-			$lFilePermanentName = $lTempDirectory . DIRECTORY_SEPARATOR . $lFilename;
+			$lFilePermanentName = $lTempDirectory . DIRECTORY_SEPARATOR . $lFileRandomName;
 
 			/* File properties needed for validation */
 			$lAllowedFileExtensions = array("gif", "jpeg", "jpg", "png");
 			$lAllowedFileTypes = array("image/gif", "image/jpeg", "image/jpg", "image/pjpeg", "image/x-png", "image/png");
 			$lFilenameParts = explode(".", $lFilename);
 			$lFileExtension = end($lFilenameParts);
-			$lValidationMessage = "Validation not performed";
+			$lValidationMessage = "Validation performed";
 			$lFileMovedMessage = "Moving file was not attempted";
 			
 			/* File property strings suitible for printing */
@@ -99,13 +100,43 @@
 				if ($lFileSize > $lAllowedFileSize){
 					$lValidationMessage .= "File size {$lFileSizeString} exceeds allowed file size {$lAllowedFileSizeString}.";
 					$lFileValid = FALSE;
-				}// end if
+        }// end if
 			}// end if $lValidateFileUpload
+      $lValidExtension = FALSE;
+      $lValidType=FALSE;
+      for($i = 0; $i<count($lAllowedFileExtensions);$i++){
+        if(strcmp($lAllowedFileExtensions[$i],$lFileExtension)== 0 ){
+          $lValidExtension = TRUE;
+        }
+      }
+      for($i = 0; $i<count($lAllowedFileTypes);$i++){
+        if(strcmp($lAllowedFileTypes[$i],$lFileType)== 0 ){
+          $lValidType = TRUE;
+        }
+      }
+      if(!$lValidType){
+					$lValidationMessage .= " File type {$lFileType} not allowed.";
+					$lFileValid = FALSE;
+      }
+      if(!$lValidExtension){
+					$lValidationMessage .= " File extension {$lFileExtension} not allowed.";
+					$lFileValid = FALSE;
+      }
+
+      if ( $lValidExtension && $lValidType ){
+        $imageinfo = getimagesize($lFileTempName);
+        $imageinfo['mime'] ??= '';
+        if(!in_array($imageinfo['mime'], $lAllowedFileTypes)&& isset($imageinfo)) 
+        {
+          $lValidationMessage .= " File not allowed.";
+          $lFileValid = FALSE;
+        }
+      }
 			
 			if ($lFileValid){
 				if (move_uploaded_file($lFileTempName, $lFilePermanentName)) {
 					$lFileMovedSuccessfully = TRUE;
-					$lFileMovedMessage = "File moved to {$lFilePermanentName}";
+          $lFileMovedMessage = "File moved successfully";
 				}else{
 					$lFileMovedSuccessfully = FALSE;
 					$lFileMovedMessage = "Error Detected. Unable to move PHP temp file {$lTempDirectory} to permanent location {$lFilePermanentName}";
@@ -162,7 +193,6 @@
 					<tr><td>&nbsp;</td></tr>
 					<tr><td class='label'>Original File Name</td><td>{$lFilename}</td></tr>
 					<tr><td class='label'>Temporary File Name</td><td>{$lFileTempName}</td></tr>
-					<tr><td class='label'>Permanent File Name</td><td>{$lFilePermanentName}</td></tr>
 					<tr><td class='label'>File Type</td><td>{$lFileType}</td></tr>
 					<tr><td class='label'>File Size</td><td>{$lFileSizeString}</td></tr>
 				</table>	

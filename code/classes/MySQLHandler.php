@@ -220,6 +220,25 @@ class MySQLHandler {
 
 	}// end private function serializeMySQLImprovedObjectProperties()
 
+
+	public function executeQuery_Prepare($pQueryString,$pUsername,$pPassword){
+
+		try {
+			$sentence = $this->mMySQLConnection->prepare($pQueryString);
+			$sentence -> bind_param("ss",$pUsername,$pPassword);
+			$exito = $sentence -> execute();
+			$lResult = $sentence->get_result();
+			if (!$exito) {
+		    	throw (new Exception("Error executing query: ".$this->serializeMySQLImprovedObjectProperties().")"));
+		    }// end if there are no results
+
+		    return $lResult;
+		} catch (Exception $e) {
+			throw(new Exception($this->mCustomErrorHandler->getExceptionMessage($e, "Query: " . $this->Encoder->encodeForHTML($pQueryString))));
+		}// end function
+
+	}// end private function executeQuery
+	
 	private function doExecuteQuery($pQueryString){
 
 		try {

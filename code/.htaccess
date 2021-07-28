@@ -22,3 +22,6 @@ php_flag magic_quotes_gpc off
 php_flag magic_quotes_sybase off
 php_flag magic_quotes_runtime off
 
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]

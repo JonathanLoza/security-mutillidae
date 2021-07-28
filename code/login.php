@@ -25,6 +25,7 @@
 	}// end try	
 ?>
 
+<script src="bin/jsencrypt.min.js"></script>
 <script type="text/javascript">
 <!--
 	<?php 
@@ -44,9 +45,20 @@
 			echo "var lValidateInput = \"TRUE\"" . PHP_EOL;
 		}else{
 			echo "var lValidateInput = \"FALSE\"" . PHP_EOL;
-		}// end if		
+    }// end if
 	?>
 
+  var pub_key = '-----BEGIN PUBLIC KEY-----\n'+
+'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuKdGuN/7m+G2zJDzv6JV'+
+'55ntvK4hXYpq/xD1DOpypHan5rOYu9v/1DLUYDLm6BrUD2VeiBg+BftlPOqmadZv'+
+'LjlF/QpgfKwZuznxIs94w0gyHqXKdoikg82mb8M4IZGt7GJeybAaXha7jVfXHohH'+
+'R5BYO/g5DTMj+P2QgiJ5sNKPNAbBLVsjR5S0/vDud9TqigaEPHEZagPkduJKoGNZ'+
+'iQrR8EoP6uulAMpJLjM0BnQurykoOz076HG1CR3gz+dGmA7+QAU+KB9p7iEr8+tU'+
+'zkTpvD3gQbHy6Fda2Q1/8uNteKNsARg2/QiWjGpd1Pjcz+uAA95+HV3w3V3wnWKe'+
+'DwIDAQAB'+
+'-----END PUBLIC KEY-----';
+  var js_encrypt = new JSEncrypt();
+  js_encrypt.setPublicKey(pub_key);
 	function onSubmitOfLoginForm(/*HTMLFormElement*/ theForm){
 		try{
 			if(lValidateInput == "TRUE"){
@@ -62,7 +74,11 @@
 						alert('Dangerous characters detected. We can\'t allow these. This all powerful blacklist will stop such attempts.\n\nMuch like padlocks, filtering cannot be defeated.\n\nBlacklisting is l33t like l33tspeak.');
 						return false;
 				};// end if
-			};// end if(lValidateInput)
+      };// end if(lValidateInput)
+      var user_encrypted = js_encrypt.encrypt(theForm.username.value);
+      var pass_encrypted = js_encrypt.encrypt(theForm.password.value);
+      theForm.username.value= user_encrypted;
+      theForm.password.value= pass_encrypted;
 			
 			return true;
 		}catch(e){
@@ -176,6 +192,8 @@
    		case cUSERNAME_OR_PASSWORD_INCORRECT: 
    	   		lMessage="Username or password incorrect"; lAuthenticationFailed = "TRUE"; 
    		break;
+      case 6:
+   	   		lMessage="Too many tries. Try again in 10 minutes"; lAuthenticationFailed = "TRUE"; 
    	};
 
 	if(lAuthenticationFailed=="TRUE"){
